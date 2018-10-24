@@ -1,0 +1,61 @@
+<html>
+    <header>
+        <title>斗图大师</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            .search{
+                margin: 100 auto;
+                text-align: center
+
+            }
+            #img{
+                width: 200px;
+                height: 200px;
+                margin-top: 50px;
+            }
+        </style>
+    </header>
+    <body>
+        <div class="search">
+            <h1>斗图大师DEMO</h1>
+            <input type="text" id="keyword">
+            <button id="search">搜索</button>
+            <h2 id="caution">等待输入</h2>
+            <div id="img_container">
+                <img src="#" id="img"/>
+            </div>
+        </div>
+        
+        <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.js"></script>
+        <script>
+           $(document).ready(function(){
+               $("#search").click(function(){
+                $("#caution").html("正在处理……请稍后");
+                var request = new XMLHttpRequest();
+	            request.open("GET", "getImage.php?text=" + $("#keyword").val());
+	            request.send();
+	            request.onreadystatechange = function() {
+		        if (request.readyState===4) {
+                    
+			        if (request.status===200) { 
+				        data = request.responseText;
+                        dataJSON = JSON.parse(data);
+                        if(dataJSON.success == true){
+                            $("#img").attr("src",dataJSON.src);
+                            $("#caution").html("");
+                        }
+                        else{
+                            alert("发生错误:" + dataJSON.msg)
+                        }
+                        
+			        } else {
+				        alert("发生错误：" + request.status);
+			}
+		} 
+	}
+		        });
+               });
+           
+        </script>
+    </body>
+</html>
